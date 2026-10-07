@@ -1,5 +1,5 @@
 window.PORTFOLIO_DATA = {
-  "generated": "2026-10-07T17:56",
+  "generated": "2026-10-07T17:58",
   "projects": [
     {
       "folder": "backtester",
@@ -29,9 +29,14 @@ window.PORTFOLIO_DATA = {
     },
     {
       "folder": "nichescreener",
-      "title": "Nichescreener (screener for nichemarkeder)",
-      "description": "En screener i Python, der tager et tema (fx silicium-fotonik, små modulære reaktorer, sjældne jordarter) og: finder de børsnoterede selskaber, der har med temaet at gøre, måler hvor eksponerede de er, med citater fra deres egne årsrapporter som bevis, scorer dem på eksponering, bredde i nichen, eksponering på tværs af temaer, økonomisk kvalitet og værdiansættelse, viser resultatet i et dashboard med rangliste, heatmap og et kort med beviser for hvert selskab.",
-      "tags": [],
+      "title": "Niche Market Screener",
+      "description": "A Python screener that takes an investment theme (e.g. silicon photonics, small modular reactors or rare earths) and finds the listed companies involved through SEC full-text search. It measures how exposed each company is, with quotes from its own annual reports as evidence, and ranks them on exposure, breadth across the niche, financial quality and valuation in a dashboard.",
+      "tags": [
+        "Python",
+        "SEC EDGAR",
+        "Claude API",
+        "Chart.js"
+      ],
       "links": {},
       "updated": "2026-10-07"
     },
