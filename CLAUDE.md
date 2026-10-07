@@ -18,6 +18,8 @@ Kun Pythons standardbibliotek bruges; der skal ikke installeres pakker.
 python3 -m unittest discover tests
 ```
 
+Visuelle tests: browser-panelet i Claude kan ikke indlæse CSS/JS fra `file://`. Brug preview-serveren "portfolio" (port 8123, defineret i `Agentic_Work/.claude/launch.json`).
+
 ## Automatisk opdatering
 
 En launchd-agent kører `build.py` hver mandag kl. 9 og logger til `logs/build.log`.
