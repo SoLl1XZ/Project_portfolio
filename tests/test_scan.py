@@ -2,24 +2,12 @@ import json
 import os
 import shutil
 import subprocess
-import tempfile
 import unittest
 from datetime import datetime
-from pathlib import Path
 
+from helpers import TempDirTestCase, make_project
 from scan import (detect_technologies, last_updated, parse_markdown, read_overrides, read_text_metadata,
                   scan_project, strip_inline_markdown, title_from_folder_name)
-
-
-def make_project(root: Path, name: str, files: dict[str, str]) -> Path:
-    """Create a project folder under root with the given {relative path: content} files."""
-    project_dir = root / name
-    project_dir.mkdir()
-    for relative_path, content in files.items():
-        path = project_dir / relative_path
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content, encoding="utf-8")
-    return project_dir
 
 
 class StripInlineMarkdownTest(unittest.TestCase):
@@ -60,15 +48,6 @@ class TitleFromFolderNameTest(unittest.TestCase):
 
     def test_keeps_existing_capitals(self):
         self.assertEqual(title_from_folder_name("OCaml_parser"), "OCaml Parser")
-
-
-class TempDirTestCase(unittest.TestCase):
-    def setUp(self):
-        self._tmp = tempfile.TemporaryDirectory()
-        self.root = Path(self._tmp.name)
-
-    def tearDown(self):
-        self._tmp.cleanup()
 
 
 class ReadTextMetadataTest(TempDirTestCase):
