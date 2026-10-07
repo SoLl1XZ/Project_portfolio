@@ -44,6 +44,7 @@ CLAUDE_TITLE_PREFIX = re.compile(r"^CLAUDE\.md\s*[–—:-]\s*", re.IGNORECASE)
 
 CODE_FENCES = ("```", "~~~")
 NON_PROSE_LINE = re.compile(r"^(#|[-*+]\s|\d+\.\s|>|\||<|---|\*\*\*)")
+LIST_ITEM = re.compile(r"^([-*+]|\d+\.)\s+")
 MARKDOWN_LINK = re.compile(r"!?\[([^\]]*)\]\([^)]*\)")
 EMPHASIS_MARKERS = re.compile(r"[*`]")
 
@@ -58,31 +59,50 @@ def is_prose(line: str) -> bool:
     return bool(line) and not NON_PROSE_LINE.match(line)
 
 
-def parse_markdown(text: str) -> tuple[str | None, str | None]:
-    """Return the first level-1 heading and the first prose paragraph of a markdown document."""
-    title: str | None = None
-    paragraph: list[str] = []
-    paragraph_done = False
+def lines_outside_code_blocks(text: str) -> list[str]:
+    """Stripped lines with fenced code removed; each fence becomes a blank line so it ends a paragraph."""
+    lines: list[str] = []
     in_code_block = False
-
     for line in (raw.strip() for raw in text.splitlines()):
         if line.startswith(CODE_FENCES):
             in_code_block = not in_code_block
-            paragraph_done = paragraph_done or bool(paragraph)
-            continue
-        if in_code_block:
-            continue
-        if title is None and line.startswith("# "):
-            title = strip_inline_markdown(line[2:]) or None
-        if paragraph_done:
-            continue
-        if is_prose(line):
-            paragraph.append(line)
-        elif paragraph:
-            paragraph_done = True
+            lines.append("")
+        elif not in_code_block:
+            lines.append(line)
+    return lines
 
-    description = strip_inline_markdown(" ".join(paragraph)) if paragraph else None
-    return title, description
+
+def list_items_from(lines: list[str], index: int) -> list[str]:
+    """Text of the list that starts at `index` (after any blank lines), without bullets or numbers."""
+    while index < len(lines) and not lines[index]:
+        index += 1
+    items: list[str] = []
+    while index < len(lines) and LIST_ITEM.match(lines[index]):
+        items.append(LIST_ITEM.sub("", lines[index]))
+        index += 1
+    return items
+
+
+def first_paragraph(lines: list[str]) -> str | None:
+    """The first run of prose lines. If it ends with ':', the sentence continues in a list, so include it."""
+    start = next((i for i, line in enumerate(lines) if is_prose(line)), None)
+    if start is None:
+        return None
+    end = start
+    while end < len(lines) and is_prose(lines[end]):
+        end += 1
+    parts = lines[start:end]
+    if parts[-1].endswith(":"):
+        parts += list_items_from(lines, end)
+    return strip_inline_markdown(" ".join(parts))
+
+
+def parse_markdown(text: str) -> tuple[str | None, str | None]:
+    """Return the first level-1 heading and the first prose paragraph of a markdown document."""
+    lines = lines_outside_code_blocks(text)
+    heading = next((line[2:] for line in lines if line.startswith("# ")), None)
+    title = strip_inline_markdown(heading) if heading else None
+    return title or None, first_paragraph(lines)
 
 
 def title_from_folder_name(folder_name: str) -> str:

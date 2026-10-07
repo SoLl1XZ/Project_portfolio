@@ -34,6 +34,13 @@ class ParseMarkdownTest(unittest.TestCase):
         )
         self.assertEqual(parse_markdown(text)[1], "The real description.")
 
+    def test_paragraph_ending_with_colon_includes_the_list_it_introduces(self):
+        text = "# T\n\nIt does three things:\n\n1. **finds** stocks,\n2. scores them,\n3. shows them.\n\nMore.\n"
+        self.assertEqual(parse_markdown(text)[1], "It does three things: finds stocks, scores them, shows them.")
+
+    def test_list_after_a_complete_sentence_is_not_included(self):
+        self.assertEqual(parse_markdown("Intro.\n\n- item\n")[1], "Intro.")
+
     def test_only_level_one_heading_counts_as_title(self):
         self.assertEqual(parse_markdown("## Sub\n\nText.\n")[0], None)
 
