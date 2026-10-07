@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.eriklokkegaard.portfolio-build</string>
+
+  <!-- Full paths, because launchd runs jobs with a minimal PATH. -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Library/Frameworks/Python.framework/Versions/3.11/bin/python3</string>
+    <string>/Users/eriklokkegaard/Documents/Obsidian/Agentic_Work/Projects/portfolio/build.py</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/eriklokkegaard/Documents/Obsidian/Agentic_Work/Projects/portfolio</string>
+
+  <!-- Every Monday at 09:00 (Weekday 1). A run missed while the Mac sleeps happens on wake;
+       one missed while it is switched off is skipped until next week. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>1</integer>
+    <key>Hour</key>
+    <integer>9</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/eriklokkegaard/Documents/Obsidian/Agentic_Work/Projects/portfolio/logs/build.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/eriklokkegaard/Documents/Obsidian/Agentic_Work/Projects/portfolio/logs/build.log</string>
+</dict>
+</plist>

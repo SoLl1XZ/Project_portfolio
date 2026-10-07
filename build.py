@@ -47,7 +47,8 @@ def main() -> None:
     generated = datetime.now().isoformat(timespec="minutes")
     OUTPUT_FILE.parent.mkdir(exist_ok=True)
     OUTPUT_FILE.write_text(render_data_file(projects, generated), encoding="utf-8")
-    print(f"Wrote {len(projects)} projects to {OUTPUT_FILE.relative_to(PORTFOLIO_DIR)}")
+    # The timestamp makes logs/build.log show when the weekly launchd run last happened.
+    print(f"{generated}  wrote {len(projects)} projects to {OUTPUT_FILE.relative_to(PORTFOLIO_DIR)}")
 
 
 if __name__ == "__main__":

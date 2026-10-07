@@ -18,6 +18,20 @@ Kun Pythons standardbibliotek bruges; der skal ikke installeres pakker.
 python3 -m unittest discover tests
 ```
 
+## Automatisk opdatering
+
+En launchd-agent kører `build.py` hver mandag kl. 9 og logger til `logs/build.log`.
+Sover Mac'en på det tidspunkt, kører den ved næste opvågning; er den slukket, springes ugen over.
+
+```bash
+./launchd/install.sh                                                   # installér / geninstallér
+launchctl kickstart -k gui/$(id -u)/com.eriklokkegaard.portfolio-build # kør nu
+launchctl print gui/$(id -u)/com.eriklokkegaard.portfolio-build        # status og sidste exit code
+./launchd/uninstall.sh                                                 # fjern igen
+```
+
+Ændres plist-filen, skal `install.sh` køres igen (den kopierer filen til `~/Library/LaunchAgents/`).
+
 ## Struktur
 
 | Fil | Ansvar |
@@ -26,6 +40,7 @@ python3 -m unittest discover tests
 | `build.py` | Scanner alle projektmapper og skriver `data/projects.js` |
 | `index.html`, `style.css`, `app.js` | Selve siden |
 | `data/projects.js` | Genereret data: `window.PORTFOLIO_DATA = {...}` |
+| `launchd/` | Ugentlig genbygning: plist samt install- og uninstall-script |
 | `tests/` | Unit tests (unittest) |
 
 ## Hvor projektdata kommer fra

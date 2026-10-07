@@ -1,5 +1,5 @@
 window.PORTFOLIO_DATA = {
-  "generated": "2026-10-07T17:49",
+  "generated": "2026-10-07T17:54",
   "projects": [
     {
       "folder": "backtester",
@@ -25,10 +25,20 @@ window.PORTFOLIO_DATA = {
       "updated": "2026-10-07"
     },
     {
+      "folder": "nichescreener",
+      "title": "Nichescreener (screener for nichemarkeder)",
+      "description": "En screener i Python, der tager et tema (fx silicium-fotonik, små modulære reaktorer, sjældne jordarter) og:",
+      "tags": [],
+      "links": {},
+      "updated": "2026-10-07"
+    },
+    {
       "folder": "researchagent",
       "title": "Researchagent (aktieanalyse med Claude API)",
       "description": "En agent i Python, der tager en ticker og skriver en analyse på én side af selskabet. Den henter data fra SEC (regnskabstal og årsrapporter) og kursdata, og Claude API'et bestemmer selv, hvilke værktøjer den skal bruge. Senere kan den vise, hvad der har ændret sig siden sidste år, sammenligne selskaber og overvåge min watchlist.",
-      "tags": [],
+      "tags": [
+        "Python"
+      ],
       "links": {},
       "updated": "2026-10-07"
     }
