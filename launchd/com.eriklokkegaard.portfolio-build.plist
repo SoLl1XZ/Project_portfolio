@@ -5,11 +5,12 @@
   <key>Label</key>
   <string>com.eriklokkegaard.portfolio-build</string>
 
-  <!-- Full paths, because launchd runs jobs with a minimal PATH. -->
+  <!-- Full paths, because launchd runs jobs with a minimal PATH. Python stays the program (not a shell
+       script), because it already has macOS permission to read ~/Documents. -->
   <key>ProgramArguments</key>
   <array>
     <string>/Library/Frameworks/Python.framework/Versions/3.11/bin/python3</string>
-    <string>/Users/eriklokkegaard/Documents/Code/Projects/portfolio/build.py</string>
+    <string>/Users/eriklokkegaard/Documents/Code/Projects/portfolio/publish.py</string>
   </array>
   <key>WorkingDirectory</key>
   <string>/Users/eriklokkegaard/Documents/Code/Projects/portfolio</string>

@@ -20,9 +20,19 @@ python3 -m unittest discover tests
 
 Visuelle tests: browser-panelet i Claude kan ikke indlæse CSS/JS fra `file://`. Brug preview-serveren "portfolio" (port 8123, defineret i `~/Documents/Code/.claude/launch.json`).
 
+## GitHub og online-side
+
+- Repo: https://github.com/SoLl1XZ/Project_portfolio (offentligt). Siden: https://soll1xz.github.io/Project_portfolio/
+- GitHub Pages publicerer `main` fra roden uden byggetrin. `.nojekyll` slår Jekyll fra, så fx `CLAUDE.md` ikke bliver til en side.
+- Commits bruger noreply-adressen `222303744+SoLl1XZ@users.noreply.github.com` (sat i repoets lokale git-config), aldrig gmail.
+- Kun Macro Dashboard og Backtester vises (Eriks valg 2026-10-12). De andre projekter har `"hidden": true` i deres `portfolio.json`.
+
 ## Automatisk opdatering
 
-En launchd-agent kører `build.py` hver mandag kl. 9 og logger til `logs/build.log`.
+En launchd-agent kører `publish.py` hver mandag kl. 9 og logger til `logs/build.log`. Den kører `build.py`, og hvis
+et projekt er ændret (ikke kun tidsstemplet), committer den `data/projects.js` og pusher til GitHub.
+Kun tidsstempel ændret: filen sættes tilbage, så arbejdsmappen forbliver ren.
+Den pusher også commits, som en tidligere kørsel uden internet efterlod, og alle andre lokale commits på `main`.
 Sover Mac'en på det tidspunkt, kører den ved næste opvågning; er den slukket, springes ugen over.
 
 ```bash
@@ -40,6 +50,7 @@ launchctl print gui/$(id -u)/com.eriklokkegaard.portfolio-build        # status 
 |-----|--------|
 | `scan.py` | Udtrækker titel, beskrivelse, teknologier og dato fra én projektmappe |
 | `build.py` | Scanner alle projektmapper og skriver `data/projects.js` |
+| `publish.py` | Kører `build.py`, committer og pusher data, hvis et projekt er ændret (bruges af launchd) |
 | `index.html`, `style.css`, `app.js` | Selve siden |
 | `data/projects.js` | Genereret data: `window.PORTFOLIO_DATA = {...}` |
 | `launchd/` | Ugentlig genbygning: plist samt install- og uninstall-script |
@@ -71,4 +82,6 @@ Eksempel på `portfolio.json`:
 - Data gemmes som `.js` (ikke `.json`), fordi en side åbnet via `file://` ikke må `fetch()` lokale filer.
 - Browseren kan ikke selv liste mapper på disken, derfor scanner Python og skriver en datafil.
 - Tekst fra projekter indsættes med `textContent`, aldrig `innerHTML`, så indhold fra en README ikke kan køre som kode.
-- `data/projects.js` committes, så siden senere kan lægges på GitHub Pages uden byggetrin.
+- `data/projects.js` committes, så siden kan ligge på GitHub Pages uden byggetrin.
+- Byggeriet sker lokalt (ikke i GitHub Actions), fordi det skal læse søskendemapperne på Mac'en.
+- launchd kører Python direkte, ikke et shell-script, fordi Python allerede har macOS' tilladelse til `~/Documents`.
