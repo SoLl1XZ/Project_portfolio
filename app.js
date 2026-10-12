@@ -34,29 +34,61 @@ function renderFooter(project) {
   return footer;
 }
 
+function renderImage(project) {
+  const image = element("img", "card-image");
+  image.src = project.image;
+  image.alt = `Screenshot of ${project.title}`;
+  image.loading = "lazy";
+  const [firstUrl] = Object.values(project.links);
+  if (!firstUrl) return image;
+  // The same link is in the footer, so this copy is hidden from keyboard and screen readers.
+  const link = element("a", "card-image-link");
+  link.href = firstUrl;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.tabIndex = -1;
+  link.setAttribute("aria-hidden", "true");
+  link.append(image);
+  return link;
+}
+
 function renderCard(project) {
-  const card = element("article", "card");
-  card.append(element("h3", "card-title", project.title));
-  if (project.description) card.append(element("p", "card-description", project.description));
-  if (project.tags.length) card.append(renderTags(project.tags));
-  card.append(renderFooter(project));
+  const card = element("article", project.image ? "card card-featured" : "card");
+  if (project.image) card.append(renderImage(project));
+  const body = element("div", "card-body");
+  if (project.image) body.append(element("span", "badge", "Featured"));
+  body.append(element("h3", "card-title", project.title));
+  if (project.description) body.append(element("p", "card-description", project.description));
+  if (project.tags.length) body.append(renderTags(project.tags));
+  body.append(renderFooter(project));
+  card.append(body);
   return card;
 }
 
+// Projects with a screenshot get a full-width card; the rest share a grid below them.
+function renderProjects(list, projects) {
+  list.append(...projects.filter((project) => project.image).map(renderCard));
+  const compact = projects.filter((project) => !project.image);
+  if (compact.length === 0) return;
+  const grid = element("div", "grid");
+  grid.append(...compact.map(renderCard));
+  list.append(grid);
+}
+
 function renderPortfolio(data) {
-  const grid = document.getElementById("projects");
+  const list = document.getElementById("projects");
   if (!data) {
-    grid.append(element("p", "message", "No project data found. Run `python3 build.py` to generate it."));
+    list.append(element("p", "message", "No project data found. Run `python3 build.py` to generate it."));
     return;
   }
   const { projects, generated } = data;
   document.getElementById("project-count").textContent = `${projects.length} ${projects.length === 1 ? "project" : "projects"}`;
   document.getElementById("generated").textContent = `Last built ${BUILD_TIME_FORMAT.format(new Date(generated))}`;
   if (projects.length === 0) {
-    grid.append(element("p", "message", "No projects yet."));
+    list.append(element("p", "message", "No projects yet."));
     return;
   }
-  grid.append(...projects.map(renderCard));
+  renderProjects(list, projects);
 }
 
 renderPortfolio(window.PORTFOLIO_DATA);

@@ -5,7 +5,7 @@ import os
 import unittest
 from datetime import datetime
 
-from build import collect_projects, find_project_dirs, render_data_file
+from build import attach_images, collect_projects, find_project_dirs, render_data_file
 from helpers import TempDirTestCase, make_project
 
 
@@ -45,6 +45,29 @@ class CollectProjectsTest(TempDirTestCase):
             projects = collect_projects([good, broken])
         self.assertEqual([project["folder"] for project in projects], ["good"])
         self.assertIn("skipped broken", stderr.getvalue())
+
+
+class AttachImagesTest(TempDirTestCase):
+    def setUp(self):
+        super().setUp()
+        self.images_dir = self.root / "images"
+        self.images_dir.mkdir()
+
+    def test_project_with_screenshot_gets_a_path_relative_to_the_page(self):
+        (self.images_dir / "dash.jpg").write_bytes(b"")
+        projects = attach_images([{"folder": "dash"}, {"folder": "plain"}], self.images_dir)
+        self.assertEqual(projects, [{"folder": "dash", "image": "images/dash.jpg"}, {"folder": "plain"}])
+
+    def test_projects_with_screenshot_come_first_and_keep_their_order(self):
+        for name in ("b", "d"):
+            (self.images_dir / f"{name}.jpg").write_bytes(b"")
+        projects = attach_images([{"folder": name} for name in "abcd"], self.images_dir)
+        self.assertEqual([project["folder"] for project in projects], ["b", "d", "a", "c"])
+
+    def test_other_formats_and_missing_folder_give_no_image(self):
+        (self.images_dir / "dash.png").write_bytes(b"")
+        self.assertEqual(attach_images([{"folder": "dash"}], self.images_dir), [{"folder": "dash"}])
+        self.assertEqual(attach_images([{"folder": "dash"}], self.root / "missing"), [{"folder": "dash"}])
 
 
 class RenderDataFileTest(unittest.TestCase):

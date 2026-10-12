@@ -10,6 +10,9 @@ from scan import scan_project
 PORTFOLIO_DIR = Path(__file__).resolve().parent
 PROJECTS_ROOT = PORTFOLIO_DIR.parent
 OUTPUT_FILE = PORTFOLIO_DIR / "data" / "projects.js"
+# Screenshots live in this repo (images/<folder>.jpg), because GitHub Pages only serves the portfolio itself.
+IMAGES_DIR = PORTFOLIO_DIR / "images"
+IMAGE_SUFFIX = ".jpg"
 
 
 def find_project_dirs(root: Path, exclude: Path) -> list[Path]:
@@ -36,6 +39,18 @@ def collect_projects(project_dirs: list[Path]) -> list[dict]:
     return sorted(projects, key=lambda project: project["updated"], reverse=True)
 
 
+def attach_images(projects: list[dict], images_dir: Path) -> list[dict]:
+    """Give each project with a screenshot in images_dir an "image" path, and list those projects first."""
+    for project in projects:
+        screenshot = images_dir / f"{project['folder']}{IMAGE_SUFFIX}"
+        if screenshot.is_file():
+            # Relative to index.html, so the page works both on GitHub Pages and via file://.
+            project["image"] = f"{images_dir.name}/{screenshot.name}"
+    # A project with a screenshot gets the large card at the top. sorted() is stable, so the
+    # newest-first order from collect_projects is kept within each group.
+    return sorted(projects, key=lambda project: "image" not in project)
+
+
 def render_data_file(projects: list[dict], generated: str) -> str:
     """A .js file rather than .json, because a page opened via file:// may not fetch() local files."""
     payload = {"generated": generated, "projects": projects}
@@ -43,7 +58,7 @@ def render_data_file(projects: list[dict], generated: str) -> str:
 
 
 def main() -> None:
-    projects = collect_projects(find_project_dirs(PROJECTS_ROOT, exclude=PORTFOLIO_DIR))
+    projects = attach_images(collect_projects(find_project_dirs(PROJECTS_ROOT, exclude=PORTFOLIO_DIR)), IMAGES_DIR)
     generated = datetime.now().isoformat(timespec="minutes")
     OUTPUT_FILE.parent.mkdir(exist_ok=True)
     OUTPUT_FILE.write_text(render_data_file(projects, generated), encoding="utf-8")

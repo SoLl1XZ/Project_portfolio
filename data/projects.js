@@ -1,19 +1,6 @@
 window.PORTFOLIO_DATA = {
-  "generated": "2026-10-12T15:28",
+  "generated": "2026-10-12T15:47",
   "projects": [
-    {
-      "folder": "backtester",
-      "title": "Multi-Factor Backtester",
-      "description": "A Python backtester for multi-factor strategies on individual stocks. Each month every stock in the universe is ranked on factors such as momentum and low volatility; the strategy buys the top-ranked names and is compared with benchmarks after trading costs. Built with strict rules against look-ahead bias and a point-in-time S&P 500 universe.",
-      "tags": [
-        "Python",
-        "pandas",
-        "NumPy",
-        "Chart.js"
-      ],
-      "links": {},
-      "updated": "2026-10-12"
-    },
     {
       "folder": "macro_dashboard",
       "title": "Macro Dashboard",
@@ -28,6 +15,20 @@ window.PORTFOLIO_DATA = {
         "Live site": "https://soll1xz.github.io/Macro-Dashboard/",
         "GitHub": "https://github.com/SoLl1XZ/Macro-Dashboard"
       },
+      "updated": "2026-10-12",
+      "image": "images/macro_dashboard.jpg"
+    },
+    {
+      "folder": "backtester",
+      "title": "Multi-Factor Backtester",
+      "description": "A Python backtester for multi-factor strategies on individual stocks. Each month every stock in the universe is ranked on factors such as momentum and low volatility; the strategy buys the top-ranked names and is compared with benchmarks after trading costs. Built with strict rules against look-ahead bias and a point-in-time S&P 500 universe.",
+      "tags": [
+        "Python",
+        "pandas",
+        "NumPy",
+        "Chart.js"
+      ],
+      "links": {},
       "updated": "2026-10-12"
     }
   ]

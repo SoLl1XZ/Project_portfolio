@@ -4,6 +4,7 @@
   --text: #1c1c1e;
   --muted: #6b6b70;
   --border: #e3e3e0;
+  --border-hover: #c9c9c4;
   --accent: #2557a7;
   --tag-bg: #e9eef8;
   --tag-text: #23447d;
@@ -17,6 +18,7 @@
     --text: #ececef;
     --muted: #9a9aa2;
     --border: #2e2e33;
+    --border-hover: #46464d;
     --accent: #8db3f2;
     --tag-bg: #23304a;
     --tag-text: #c5d6f5;
@@ -55,10 +57,68 @@ h1 {
   line-height: 1.15;
 }
 
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
 .subtitle {
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   color: var(--muted);
-  font-size: 1.125rem;
+  font-size: 1.05rem;
+}
+
+.intro {
+  max-width: 62ch;
+  margin: 20px 0 0;
+  font-size: 1.05rem;
+}
+
+.profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.pill-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pill-link:hover,
+.pill-link:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .section-heading {
@@ -78,21 +138,93 @@ h2 {
   font-size: 0.9rem;
 }
 
-/* min(100%, 300px) lets a single column shrink below 300px on very narrow phones. */
-.grid {
+.project-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 16px;
 }
 
+/* min(100%, 300px) lets a single column shrink below 300px on very narrow phones.
+   auto-fit (not auto-fill) lets a lone card stretch to the full width. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+}
+
+/* overflow: hidden clips the screenshot to the rounded corners. */
 .card {
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: var(--shadow);
+  transition: border-color 0.15s;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+}
+
+.card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.card-image-link {
+  display: block;
+}
+
+.card-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: left top;
+  border-bottom: 1px solid var(--border);
+}
+
+.badge {
+  align-self: flex-start;
+  margin-bottom: 10px;
+  padding: 2px 10px;
+  border-radius: 6px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Side by side once there is room for both; the screenshot fills the card's height and crops on the right.
+   Below 900px the text column is so tall that the screenshot would shrink to a narrow strip, so it stacks. */
+@media (min-width: 900px) {
+  .card-featured {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+
+  .card-featured .card-image-link,
+  .card-featured .card-image {
+    height: 100%;
+  }
+
+  .card-featured .card-image {
+    aspect-ratio: auto;
+    min-height: 280px;
+    border-bottom: 0;
+    border-right: 1px solid var(--border);
+  }
+
+  .card-featured .card-body {
+    padding: 24px;
+  }
+
+  .card-featured .card-title {
+    font-size: 1.375rem;
+  }
 }
 
 .card-title {

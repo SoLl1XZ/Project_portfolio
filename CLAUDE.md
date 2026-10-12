@@ -53,6 +53,7 @@ launchctl print gui/$(id -u)/com.eriklokkegaard.portfolio-build        # status 
 | `publish.py` | Kører `build.py`, committer og pusher data, hvis et projekt er ændret (bruges af launchd) |
 | `index.html`, `style.css`, `app.js` | Selve siden |
 | `data/projects.js` | Genereret data: `window.PORTFOLIO_DATA = {...}` |
+| `images/` | Skærmbilleder, ét pr. projekt: `<mappenavn>.jpg` |
 | `launchd/` | Ugentlig genbygning: plist samt install- og uninstall-script |
 | `tests/` | Unit tests (unittest) |
 
@@ -76,6 +77,17 @@ Eksempel på `portfolio.json`:
   "hidden": false
 }
 ```
+
+## Skærmbilleder og layout
+
+- Findes `images/<mappenavn>.jpg`, får projektet feltet `image` og vises som stort kort ("Featured") øverst.
+  Projekter uden billede vises som kompakte kort i et grid nedenunder. Der er intet `featured`-flag.
+- Billederne ligger her (ikke i projektmapperne), fordi GitHub Pages kun viser filer fra dette repo.
+- Ugejobbet committer kun `data/projects.js`. Et nyt eller ændret billede skal committes i hånden.
+- `macro_dashboard.jpg` er 800×500 fra browser-panelet (fanen Global, mørk tilstand). Et skarpere billede med samme
+  navn og forhold 16:10 kan erstatte det.
+- Det store kort står side om side fra 900 px. Under det ligger billedet øverst, ellers bliver det en smal stribe.
+- Backtester har intet billede, før dens dashboard (dens M4) findes. Brug aldrig et opdigtet diagram.
 
 ## Vigtige beslutninger
 
