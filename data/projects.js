@@ -1,5 +1,5 @@
 window.PORTFOLIO_DATA = {
-  "generated": "2026-10-07T17:58",
+  "generated": "2026-10-12T15:28",
   "projects": [
     {
       "folder": "backtester",
@@ -12,46 +12,23 @@ window.PORTFOLIO_DATA = {
         "Chart.js"
       ],
       "links": {},
-      "updated": "2026-10-07"
+      "updated": "2026-10-12"
     },
     {
       "folder": "macro_dashboard",
       "title": "Macro Dashboard",
-      "description": "A static dashboard with macroeconomic indicators in six sections: Global, US, Europe, Denmark, Asia and China. A Python script pulls the data from public APIs (FRED, ECB, Eurostat, BIS, IMF and Statistics Denmark), and the page draws the charts with Chart.js.",
+      "description": "A static dashboard with over 250 macroeconomic charts covering the world economy, stocks, commodities, three regions and 16 countries, where every country opens with the same 11 core panels. A Python script pulls the data from public sources (FRED, ECB, OECD, IMF, BIS, Eurostat, the World Bank and Statistics Denmark), and GitHub Actions refreshes it every day. The page draws the charts with Chart.js and adds signals such as a z-score heatmap and a release calendar, country comparisons, search and fullscreen zoom.",
       "tags": [
         "Python",
         "JavaScript",
         "Chart.js",
         "HTML/CSS"
       ],
-      "links": {},
-      "updated": "2026-10-07"
-    },
-    {
-      "folder": "nichescreener",
-      "title": "Niche Market Screener",
-      "description": "A Python screener that takes an investment theme (e.g. silicon photonics, small modular reactors or rare earths) and finds the listed companies involved through SEC full-text search. It measures how exposed each company is, with quotes from its own annual reports as evidence, and ranks them on exposure, breadth across the niche, financial quality and valuation in a dashboard.",
-      "tags": [
-        "Python",
-        "SEC EDGAR",
-        "Claude API",
-        "Chart.js"
-      ],
-      "links": {},
-      "updated": "2026-10-07"
-    },
-    {
-      "folder": "researchagent",
-      "title": "Research Agent",
-      "description": "A Python agent that takes a stock ticker and writes a one-page analysis of the company. It pulls financial statements and annual reports from the SEC plus price data, and the Claude API decides which tools to use along the way.",
-      "tags": [
-        "Python",
-        "Claude API",
-        "Tool use",
-        "SEC EDGAR"
-      ],
-      "links": {},
-      "updated": "2026-10-07"
+      "links": {
+        "Live site": "https://soll1xz.github.io/Macro-Dashboard/",
+        "GitHub": "https://github.com/SoLl1XZ/Macro-Dashboard"
+      },
+      "updated": "2026-10-12"
     }
   ]
 };
